@@ -22,7 +22,8 @@ namespace FasePractica.WebApp.Controllers
         // GET: Contactos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Contactos.ToListAsync());
+            var applicationDbContext = _context.Contactos.Include(c => c.Empresa);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Contactos/Details/5
@@ -34,6 +35,7 @@ namespace FasePractica.WebApp.Controllers
             }
 
             var contacto = await _context.Contactos
+                .Include(c => c.Empresa)
                 .FirstOrDefaultAsync(m => m.ContactoId == id);
             if (contacto == null)
             {
@@ -46,6 +48,7 @@ namespace FasePractica.WebApp.Controllers
         // GET: Contactos/Create
         public IActionResult Create()
         {
+            ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ContactoId,Nombres,Apellidos,Telefono,Titulo,Cargo,Correo")] Contacto contacto)
+        public async Task<IActionResult> Create([Bind("ContactoId,Nombres,Apellidos,Telefono,Titulo,Cargo,Correo,EmpresaId")] Contacto contacto)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace FasePractica.WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias", contacto.EmpresaId);
             return View(contacto);
         }
 
@@ -78,6 +82,7 @@ namespace FasePractica.WebApp.Controllers
             {
                 return NotFound();
             }
+            ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias", contacto.EmpresaId);
             return View(contacto);
         }
 
@@ -86,7 +91,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ContactoId,Nombres,Apellidos,Telefono,Titulo,Cargo,Correo")] Contacto contacto)
+        public async Task<IActionResult> Edit(int id, [Bind("ContactoId,Nombres,Apellidos,Telefono,Titulo,Cargo,Correo,EmpresaId")] Contacto contacto)
         {
             if (id != contacto.ContactoId)
             {
@@ -113,6 +118,7 @@ namespace FasePractica.WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmpresaId"] = new SelectList(_context.Empresas, "EmpresaId", "Alias", contacto.EmpresaId);
             return View(contacto);
         }
 
@@ -125,6 +131,7 @@ namespace FasePractica.WebApp.Controllers
             }
 
             var contacto = await _context.Contactos
+                .Include(c => c.Empresa)
                 .FirstOrDefaultAsync(m => m.ContactoId == id);
             if (contacto == null)
             {

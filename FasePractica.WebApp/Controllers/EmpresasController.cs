@@ -46,6 +46,13 @@ namespace FasePractica.WebApp.Controllers
         // GET: Empresas/Create
         public IActionResult Create()
         {
+            ViewBag.TiposEmpresa = new SelectList(
+                new[]
+                {
+                    new { DataValueField = TipoEmpresa.Publico, DataTextField = "Público" },
+                    new { DataValueField = TipoEmpresa.Privado, DataTextField = "Privado" }
+                },
+                "DataValueField", "DataTextField");
             return View();
         }
 
@@ -54,7 +61,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmpresaId,Nombre,Ruc,Telefono,Direccion,Latitud,Longitud,Descripcion")] Empresa empresa)
+        public async Task<IActionResult> Create([Bind("EmpresaId,Nombre,Alias,TipoEmpresa,Ruc,Telefono,Correo,SectorProductivo,Direccion,Latitud,Longitud,Descripcion")] Empresa empresa)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +93,7 @@ namespace FasePractica.WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmpresaId,Nombre,Ruc,Telefono,Direccion,Latitud,Longitud,Descripcion")] Empresa empresa)
+        public async Task<IActionResult> Edit(int id, [Bind("EmpresaId,Nombre,Alias,TipoEmpresa,Ruc,Telefono,Correo,SectorProductivo,Direccion,Latitud,Longitud,Descripcion")] Empresa empresa)
         {
             if (id != empresa.EmpresaId)
             {
