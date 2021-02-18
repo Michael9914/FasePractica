@@ -8,7 +8,7 @@ namespace FasePractica.WebApp.Models
         public int ContactoId { get; set; }
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
-        [Display(Name ="Teléfono")]
+        [Display(Name ="Teléfono")] 
         public string Telefono { get; set; }
         [Display(Name = "Título")]
         public string Titulo { get; set; }
